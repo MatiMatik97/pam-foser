@@ -19,10 +19,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="@string/label_settings">
-        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/label_settings"
+            android:parentActivityName=".MainActivity"></activity>
+
+        <service
+            android:name=".MyForegroundService"
+            android:enabled="true"></service>
     </application>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"></uses-permission>
 
 </manifest>

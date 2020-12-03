@@ -29,6 +29,19 @@
             app:summaryOn="@string/attachment_summary_on"
             app:title="@string/attachment_title" />
 
+        <DropDownPreference
+            app:defaultValue="2"
+            app:entries="@array/refresh_times"
+            app:entryValues="@array/refresh_times_values"
+            app:key="refresh_freq"
+            app:title="How often to increase the timer"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:key="save_counter"
+            app:summary="Continue counting after restart"
+            app:title="Remember timer value" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

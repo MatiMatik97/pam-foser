@@ -19,8 +19,9 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     private Button buttonStart, buttonStop, buttonRestart;
     private TextView textInfoService, textInfoSettings;
-    private String message;
-    private Boolean show_time, work, work_double;
+    private String message, seconds;
+    private Boolean show_time, work, work_double, save_counter;
+    private int timerValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickStart(View view) {
+        MyForegroundService.counter = timerValue;
+
         getPreferences();
 
         Intent startIntent = new Intent(this, MyForegroundService.class);
@@ -88,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         startIntent.putExtra(MyForegroundService.TIME, show_time);
         startIntent.putExtra(MyForegroundService.WORK, work);
         startIntent.putExtra(MyForegroundService.WORK_DOUBLE, work_double);
+        startIntent.putExtra(MyForegroundService.REFRESH_FREQ, seconds);
+        startIntent.putExtra(MyForegroundService.SAVE_COUNTER, save_counter);
 
         ContextCompat.startForegroundService(this, startIntent);
 
@@ -95,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickStop(View view) {
+        if (save_counter) {
+            timerValue = MyForegroundService.counter;
+        } else {
+            timerValue = 0;
+        }
+
         Intent stopIntent = new Intent(this, MyForegroundService.class);
         stopService(stopIntent);
 
@@ -113,11 +124,15 @@ public class MainActivity extends AppCompatActivity {
         show_time = sharedPreferences.getBoolean("show_time", true);
         work = sharedPreferences.getBoolean("sync", true);
         work_double = sharedPreferences.getBoolean("double", false);
+        seconds = sharedPreferences.getString("refresh_freq", "2");
+        save_counter = sharedPreferences.getBoolean("save_counter", false);
 
         return "Message: " + message + "\n"
                 + "show_time: " + show_time.toString() + "\n"
                 + "work: " + work.toString() + "\n"
-                + "double: " + work_double.toString();
+                + "double: " + work_double.toString() + "\n"
+                + "refresh_freq: " + seconds + "\n"
+                + "save_counter: " + save_counter;
     }
 
     @SuppressWarnings("deprecation")
